@@ -1,26 +1,15 @@
 export const loginUser = (req, res) => {
   const { username, password } = req.body;
 
-  // Default Static Login
-  const defaultUsername = "admin";
-  const defaultPassword = "123456";
-
-  if (
-    username === defaultUsername &&
-    password === defaultPassword
-  ) {
-    return res.status(200).json({
+  if (username === "admin" && password === "123456") {
+    return res.json({
       success: true,
-      message: "Login Successful",
-      user: {
-        username: "admin",
-        role: "Admin",
-      },
+      message: "Login Success",
     });
   }
 
   return res.status(401).json({
     success: false,
-    message: "Invalid Username or Password",
+    message: "Invalid Credentials",
   });
 };
