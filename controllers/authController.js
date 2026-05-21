@@ -4,32 +4,28 @@ export const loginUser = (req, res) => {
 
   const { user_name, password } = req.body;
 
-
-  if (!user_name || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "Username and Password are required",
-    });
-  }
-
+  console.log("Request Body:", req.body);
 
   const sql = `
-    SELECT id, user_name, status
+    SELECT *
     FROM user_details
-    WHERE user_name = ? 
+    WHERE user_name = ?
     AND password = ?
     AND status = 1
   `;
 
   db.query(sql, [user_name, password], (err, result) => {
 
-
     if (err) {
+      console.log("DB Error:", err);
+
       return res.status(500).json({
         success: false,
         error: err.message,
       });
     }
+
+    console.log("DB Result:", result);
 
     if (result.length === 0) {
       return res.status(401).json({
@@ -37,7 +33,6 @@ export const loginUser = (req, res) => {
         message: "Invalid Username or Password",
       });
     }
-
 
     return res.status(200).json({
       success: true,
