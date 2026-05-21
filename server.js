@@ -1,7 +1,7 @@
 import express from "express";
 import machineRoutes from "./routes/machineRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-import userLogRoutes from "./routes/userLogRoutes.js";
+import userLogRoutes from "./routes/userlogRoutes.js";
 
 const app = express();
 
