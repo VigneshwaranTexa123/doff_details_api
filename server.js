@@ -1,6 +1,7 @@
 import express from "express";
 import machineRoutes from "./routes/machineRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import userLogRoutes from "./routes/userLogRoutes.js";
 
 const app = express();
 
@@ -8,6 +9,7 @@ app.use(express.json());
 
 app.use("/machines_data", machineRoutes);
 app.use("/auth", authRoutes);
+app.use("/userlog", userLogRoutes);
 
 const PORT = 3000;
 
