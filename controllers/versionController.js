@@ -8,7 +8,7 @@ export const getVersionControl = (req, res) => {
             app_name,
             version,
             status,
-            remarks,
+            remark,
             created_at,
             updated_at
         FROM version_control
