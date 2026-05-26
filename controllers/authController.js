@@ -2,7 +2,8 @@ import db from "../config/db.js";
 
 export const loginUser = (req, res) => {
 
-  const { user_name, password } = req.body;
+  const user_name = req.body.user_name?.trim();
+  const password = req.body.password?.trim();
 
   // Validation
   if (!user_name || !password) {
