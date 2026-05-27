@@ -8,10 +8,7 @@ export const userLog = (req, res) => {
         device_name,
         brand,
         device_version,
-        status,
-        version,
-        login_time,
-        logout_time
+        status
     } = req.body;
 
     if (
@@ -19,10 +16,7 @@ export const userLog = (req, res) => {
         !device_id ||
         !device_name ||
         !brand ||
-        !device_version ||
-        !version ||
-        !login_time ||
-        !logout_time
+        !device_version
     ) {
         return res.status(400).json({
             success: false,
@@ -38,12 +32,9 @@ export const userLog = (req, res) => {
             device_name,
             brand,
             device_version,
-            status,
-            version,
-            login_time,
-            logout_time
+            status
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?)
     `;
 
     db.query(
@@ -54,10 +45,7 @@ export const userLog = (req, res) => {
             device_name,
             brand,
             device_version,
-            status || 1,   
-            version,
-            login_time,
-            logout_time
+            status || 1
         ],
         (err, result) => {
 
