@@ -4,12 +4,13 @@ export const loginUser = (req, res) => {
 
   const user_name = req.body.user_name?.trim();
   const password = req.body.password?.trim();
+  const company_id = req.body.company_id?.trim();
 
   // Validation
-  if (!user_name || !password) {
+  if (!user_name || !password || !company_id) {
     return res.status(400).json({
       success: false,
-      message: "Username and Password are required",
+      message: "Username and Password  are required",
     });
   }
 
@@ -18,10 +19,11 @@ export const loginUser = (req, res) => {
     FROM user_details
     WHERE user_name = ?
     AND password = ?
+    AND company_id = ? 
     AND status = 1
   `;
 
-  db.query(sql, [user_name, password], (err, result) => {
+  db.query(sql, [user_name, password, company_id], (err, result) => {
 
     if (err) {
       return res.status(500).json({
@@ -42,6 +44,7 @@ export const loginUser = (req, res) => {
       message: "Login Successfully",
       user: {
         id: result[0].id,
+        unique_id: result[0].id, 
         user_name: result[0].user_name,
         status: result[0].status,
       },
