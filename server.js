@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/machines_data", machineRoutes);
-app.use("/getCompanys",companyRoutes)
+app.use("/companys",companyRoutes)
 app.use("/auth", authRoutes);
 app.use("/userlog", userLogRoutes);
 app.use("/version", versionRoutes)
