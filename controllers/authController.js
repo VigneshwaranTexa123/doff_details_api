@@ -1,15 +1,11 @@
 import db from "../config/db.js";
 
 export const loginUser = (req, res) => {
-
   try {
-
     const user_name = req.body.user_name?.trim();
     const password = req.body.password?.trim();
 
-
     if (!user_name || !password) {
-
       return res.status(400).json({
         success: false,
         message: "Username and Password are required",
@@ -21,26 +17,19 @@ export const loginUser = (req, res) => {
       FROM user_details
       WHERE user_name = ?
       AND password = ?
-      AND status = 1
       LIMIT 1
     `;
 
     db.query(sql, [user_name, password], (err, result) => {
-
       if (err) {
-
-        console.log("DATABASE ERROR :", err);
-
+        console.log("DB ERROR:", err);
         return res.status(500).json({
           success: false,
-          message: "DB not Connected. Contact Support",
-          error: err.code || err.message,
+          message: "DB Error. Contact Support",
         });
       }
 
-      // INVALID LOGIN
       if (result.length === 0) {
-
         return res.status(401).json({
           success: false,
           message: "Invalid Username and Password",
@@ -49,26 +38,28 @@ export const loginUser = (req, res) => {
 
       const user = result[0];
 
-      // COMPANY ID VALIDATION
-      if (
-        user.company_id === null ||
-        user.company_id === 0 ||
-        user.company_id === "0"
-      ) {
+      // ✅ PERMISSION CHECK (IMPORTANT PART)
+      if (Number(user.status) !== 1) {
+        return res.status(403).json({
+          success: false,
+          message: "Your permission denied",
+        });
+      }
 
+      // COMPANY VALIDATION
+      if (!user.company_id || user.company_id === 0 || user.company_id === "0") {
         return res.status(403).json({
           success: false,
           message: "Company ID not assigned. Contact Admin",
         });
       }
 
-      // LOGIN SUCCESS
+      // SUCCESS LOGIN
       return res.status(200).json({
         success: true,
         message: "Login Successfully",
         user: {
           id: user.id,
-          unique_id: user.unique_id,
           user_name: user.user_name,
           company_id: user.company_id,
           status: user.status,
@@ -77,12 +68,11 @@ export const loginUser = (req, res) => {
     });
 
   } catch (error) {
-
-    console.log("LOGIN API ERROR :", error);
+    console.log("LOGIN ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Server Error. Please Try Again Later",
+      message: "Server Error",
     });
   }
 };
