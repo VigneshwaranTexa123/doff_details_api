@@ -1,6 +1,9 @@
 import db from "../config/db.js";
 
 export const userLog = (req, res) => {
+    console.log(req.body);
+    console.log("DEVICE ID:", device_id);
+
 
     const {
         user_id,
@@ -30,15 +33,14 @@ export const userLog = (req, res) => {
         });
     }
 
-    // ✅ ONLY DEVICE ID CHECK
     const checkSql = `
         SELECT id
         FROM user_log
-        WHERE device_id = ?
+        WHERE device_id = ? AND user_id = ? AND device_name = ? AND brand = ? 
         LIMIT 1
     `;
 
-    db.query(checkSql, [device_id], (checkErr, checkResult) => {
+    db.query(checkSql, [device_id, user_id, device_name, brand], (checkErr, checkResult) => {
 
         if (checkErr) {
             return res.status(500).json({
@@ -47,7 +49,6 @@ export const userLog = (req, res) => {
             });
         }
 
-        // ✅ DEVICE EXISTS -> UPDATE
         if (checkResult.length > 0) {
 
             const updateSql = `
@@ -95,7 +96,6 @@ export const userLog = (req, res) => {
 
         } else {
 
-            // ✅ NEW DEVICE -> INSERT
             const insertSql = `
                 INSERT INTO user_log
                 (
