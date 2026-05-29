@@ -4,7 +4,8 @@ export const getMachines = (req, res) => {
 
   const { company_id } = req.body;
 
-  
+  console.log("COMPANY ID :", company_id);
+
   if (!company_id) {
     return res.status(400).json({
       success: false,
@@ -15,11 +16,10 @@ export const getMachines = (req, res) => {
   const sql = `
     SELECT *
     FROM live_doff_details
-    WHERE company_id = ?
+    WHERE CAST(company_id AS CHAR) = ?
   `;
 
-  db.query(sql, [company_id], (err, result) => {
-
+  db.query(sql, [String(company_id)], (err, result) => {
 
     if (err) {
       return res.status(500).json({
@@ -28,6 +28,7 @@ export const getMachines = (req, res) => {
       });
     }
 
+    console.log("FILTERED DATA :", result);
 
     if (result.length === 0) {
       return res.status(404).json({
@@ -35,7 +36,6 @@ export const getMachines = (req, res) => {
         message: "No Machines Found",
       });
     }
-
 
     return res.status(200).json({
       success: true,
