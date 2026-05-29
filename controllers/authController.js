@@ -68,7 +68,7 @@ export const loginUser = (req, res) => {
         message: "Login Successfully",
         user: {
           id: user.id,
-          unique_id: user.id,
+          unique_id: user.unique_id,
           user_name: user.user_name,
           company_id: user.company_id,
           status: user.status,
