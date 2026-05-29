@@ -7,7 +7,7 @@ export const loginUser = (req, res) => {
     const user_name = req.body.user_name?.trim();
     const password = req.body.password?.trim();
 
-    // EMPTY VALIDATION
+
     if (!user_name || !password) {
 
       return res.status(400).json({
@@ -27,7 +27,6 @@ export const loginUser = (req, res) => {
 
     db.query(sql, [user_name, password], (err, result) => {
 
-      // DB CONNECTION ERROR
       if (err) {
 
         console.log("DATABASE ERROR :", err);
