@@ -22,14 +22,13 @@ export const loginUser = (req, res) => {
 
     db.query(sql, [user_name, password], (err, result) => {
       if (err) {
-        console.log("DB ERROR:", err);
         return res.status(500).json({
           success: false,
           message: "DB Error. Contact Support",
         });
       }
 
-      if (result.length === 0) {
+      if (!result || result.length === 0) {
         return res.status(401).json({
           success: false,
           message: "Invalid Username and Password",
@@ -38,23 +37,22 @@ export const loginUser = (req, res) => {
 
       const user = result[0];
 
-      // ✅ PERMISSION CHECK (IMPORTANT PART)
-      if (Number(user.status) !== 1) {
+      // STATUS CHECK
+      if (parseInt(user.status, 10) !== 1) {
         return res.status(403).json({
           success: false,
           message: "Your permission denied",
         });
       }
 
-      // COMPANY VALIDATION
-      if (!user.company_id || user.company_id === 0 || user.company_id === "0") {
+      // COMPANY CHECK
+      if (!user.company_id || Number(user.company_id) === 0) {
         return res.status(403).json({
           success: false,
           message: "Company ID not assigned. Contact Admin",
         });
       }
 
-      // SUCCESS LOGIN
       return res.status(200).json({
         success: true,
         message: "Login Successfully",
@@ -68,8 +66,6 @@ export const loginUser = (req, res) => {
     });
 
   } catch (error) {
-    console.log("LOGIN ERROR:", error);
-
     return res.status(500).json({
       success: false,
       message: "Server Error",
